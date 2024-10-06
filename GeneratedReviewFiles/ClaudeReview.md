@@ -1065,3 +1065,984 @@ public class QuickSelect {
 ```
 
 Explanation: QuickSelect is an optimization of QuickSort that only recurses into one side of the partition. It has an average time complexity of O(n), making it more efficient than sorting the entire array when we only need to find a single element. The algorithm partitions the array around a pivot and recursively searches the appropriate partition until the kth largest element is found.
+Certainly! I'll continue with the fifth portion of our document, focusing on Algorithm Design and Analysis, specifically on sorting algorithms. We'll start with QuickSort and move on to cover other important sorting algorithms.
+
+5. **Algorithm Design and Analysis**
+
+### 5.3 Sorting Algorithms
+
+#### 5.3.4 QuickSort
+
+QuickSort is a highly efficient, divide-and-conquer sorting algorithm. It works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then sorted recursively.
+
+**Conceptual Explanation:**
+
+1. Choose a pivot element from the array.
+2. Partition the array around the pivot, moving smaller elements to the left and larger elements to the right.
+3. Recursively apply steps 1-2 to the sub-arrays on the left and right of the pivot.
+
+**Java Implementation:**
+
+```java
+public class QuickSort {
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 7, 8, 9, 1, 5};
+        quickSort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr));
+    }
+}
+```
+
+**Time and Space Complexity:**
+
+- Best Case Time Complexity: O(n log n)
+- Average Case Time Complexity: O(n log n)
+- Worst Case Time Complexity: O(n^2)
+- Space Complexity: O(log n)
+
+**Real-world Applications:**
+
+1. General-purpose sorting in many standard libraries
+2. Database systems for sorting and indexing
+3. Numerical simulations and computational physics
+
+#### 5.3.5 MergeSort
+
+MergeSort is another divide-and-conquer algorithm that divides the input array into two halves, recursively sorts them, and then merges the two sorted halves.
+
+**Conceptual Explanation:**
+
+1. Divide the unsorted list into n sublists, each containing one element.
+2. Repeatedly merge sublists to produce new sorted sublists until there is only one sublist remaining.
+
+**Java Implementation:**
+
+```java
+public class MergeSort {
+    public static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+
+        while (i <= mid) {
+            temp[k++] = arr[i++];
+        }
+
+        while (j <= right) {
+            temp[k++] = arr[j++];
+        }
+
+        System.arraycopy(temp, 0, arr, left, temp.length);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6, 7};
+        mergeSort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr));
+    }
+}
+```
+
+**Time and Space Complexity:**
+
+- Best Case Time Complexity: O(n log n)
+- Average Case Time Complexity: O(n log n)
+- Worst Case Time Complexity: O(n log n)
+- Space Complexity: O(n)
+
+**Real-world Applications:**
+
+1. External sorting of large data sets
+2. Inversion count problem
+3. Sorting linked lists
+
+#### Review Section
+
+**Multiple Choice Questions:**
+
+1. What is the average time complexity of QuickSort?
+   a) O(n)
+   b) O(n log n)
+   c) O(n^2)
+   d) O(log n)
+
+   Answer: b) O(n log n)
+   Explanation: On average, QuickSort divides the array into roughly equal halves, leading to a time complexity of O(n log n).
+
+2. Which sorting algorithm is always O(n log n) in all cases?
+   a) QuickSort
+   b) MergeSort
+   c) InsertionSort
+   d) SelectionSort
+
+   Answer: b) MergeSort
+   Explanation: MergeSort consistently divides the array in half and merges the sorted halves, resulting in O(n log n) time complexity in all cases.
+
+**Short Answer Questions:**
+
+1. Explain the key difference between QuickSort and MergeSort in terms of their approach to sorting.
+
+   Sample Answer: QuickSort uses a pivot element to partition the array and sorts in-place, while MergeSort divides the array into halves, sorts them separately, and then merges the sorted halves. QuickSort is generally faster in practice due to better cache performance and in-place sorting, but MergeSort provides a guaranteed O(n log n) worst-case performance.
+
+2. Why might QuickSort be preferred over MergeSort in many practical applications, despite its worse worst-case time complexity?
+
+   Sample Answer: QuickSort is often preferred because it has better cache performance due to its in-place nature, which means it doesn't require additional memory allocation during the sorting process. It also has good average-case performance and can be faster than MergeSort on many types of input data. Additionally, QuickSort can be easily modified for partial sorting or to find specific elements (like the kth smallest element) more efficiently.
+
+**Code Snippet Question:**
+
+Analyze the following code snippet:
+
+```java
+public static void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pivot = arr[(low + high) / 2];
+        int i = low - 1;
+        int j = high + 1;
+        while (true) {
+            do {
+                i++;
+            } while (arr[i] < pivot);
+            do {
+                j--;
+            } while (arr[j] > pivot);
+            if (i >= j)
+                break;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+        quickSort(arr, low, j);
+        quickSort(arr, j + 1, high);
+    }
+}
+```
+
+Question: What modification has been made to this QuickSort implementation compared to the standard version, and how might it affect the algorithm's performance?
+
+Answer: This implementation uses the "three-way partitioning" method, also known as the Dutch National Flag partitioning scheme. The key differences are:
+
+1. The pivot is chosen as the middle element `arr[(low + high) / 2]` instead of the last element.
+2. The partitioning process uses two pointers (`i` and `j`) that move towards each other, swapping elements as necessary.
+3. The recursive calls are made on `(low, j)` and `(j + 1, high)` instead of `(low, pivotIndex - 1)` and `(pivotIndex + 1, high)`.
+
+This modification can improve performance in cases with many duplicate elements, as it efficiently groups equal elements together. It's particularly effective when there are many duplicate values in the array, potentially reducing the time complexity from O(n log n) to O(n) in such cases. However, it may perform slightly worse than the standard implementation for arrays with few duplicates due to the additional comparisons and swaps.
+
+Certainly! I'll continue with the next sorting algorithm in our Algorithm Design and Analysis section.
+
+#### 5.3.6 HeapSort
+
+HeapSort is a comparison-based sorting algorithm that uses a binary heap data structure. It divides its input into a sorted and an unsorted region, and iteratively shrinks the unsorted region by extracting the largest element and moving it to the sorted region.
+
+**Conceptual Explanation:**
+
+1. Build a max heap from the input data.
+2. Swap the first element (maximum) with the last element of the heap.
+3. Reduce the heap size by 1 and heapify the root.
+4. Repeat steps 2-3 until the heap size is 1.
+
+**Java Implementation:**
+
+```java
+public class HeapSort {
+    public static void heapSort(int[] arr) {
+        int n = arr.length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+
+        // Extract elements from heap one by one
+        for (int i = n - 1; i > 0; i--) {
+            // Move current root to end
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            // Heapify reduced heap
+            heapify(arr, i, 0);
+        }
+    }
+
+    private static void heapify(int[] arr, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            int swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+
+            heapify(arr, n, largest);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6, 7};
+        heapSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}
+```
+
+**Time and Space Complexity:**
+
+- Best Case Time Complexity: O(n log n)
+- Average Case Time Complexity: O(n log n)
+- Worst Case Time Complexity: O(n log n)
+- Space Complexity: O(1)
+
+**Real-world Applications:**
+
+1. Priority queues in operating systems
+2. Order statistics: finding the kth smallest/largest element
+3. Graph algorithms like Dijkstra's shortest path and Prim's minimum spanning tree
+
+#### 5.3.7 Comparison of Sorting Algorithms
+
+Here's a summary table comparing the sorting algorithms we've covered:
+
+| Algorithm      | Best Case   | Average Case | Worst Case  | Space Complexity | Stable |
+|----------------|-------------|--------------|-------------|-------------------|--------|
+| Bubble Sort    | O(n)        | O(n^2)       | O(n^2)      | O(1)              | Yes    |
+| Selection Sort | O(n^2)      | O(n^2)       | O(n^2)      | O(1)              | No     |
+| Insertion Sort | O(n)        | O(n^2)       | O(n^2)      | O(1)              | Yes    |
+| QuickSort      | O(n log n)  | O(n log n)   | O(n^2)      | O(log n)          | No     |
+| MergeSort      | O(n log n)  | O(n log n)   | O(n log n)  | O(n)              | Yes    |
+| HeapSort       | O(n log n)  | O(n log n)   | O(n log n)  | O(1)              | No     |
+
+#### Review Section
+
+**Multiple Choice Questions:**
+
+1. Which sorting algorithm has the best space complexity?
+   a) MergeSort
+   b) QuickSort
+   c) HeapSort
+   d) Bubble Sort
+
+   Answer: c) HeapSort
+   Explanation: HeapSort has a space complexity of O(1) as it sorts in-place, unlike MergeSort which requires O(n) additional space, and QuickSort which requires O(log n) space for the recursion stack.
+
+2. Which of the following is NOT a stable sorting algorithm?
+   a) Bubble Sort
+   b) Insertion Sort
+   c) MergeSort
+   d) HeapSort
+
+   Answer: d) HeapSort
+   Explanation: HeapSort is not stable because the relative order of equal elements may change during the heapify process. The other listed algorithms maintain the relative order of equal elements.
+
+**Short Answer Questions:**
+
+1. Explain why HeapSort is considered an improvement over Selection Sort.
+
+   Sample Answer: HeapSort improves upon Selection Sort by using a heap data structure to efficiently find the maximum element in each iteration. This reduces the time complexity from O(n^2) to O(n log n). HeapSort also performs the sorting in-place, maintaining the space complexity of O(1). Additionally, HeapSort's performance is consistent across all input distributions, unlike Selection Sort which always takes quadratic time.
+
+2. In what scenarios might Insertion Sort be preferred over more efficient algorithms like QuickSort or MergeSort?
+
+   Sample Answer: Insertion Sort might be preferred in the following scenarios:
+   1. Small data sets: For very small arrays (typically less than 10-20 elements), Insertion Sort can outperform more complex algorithms due to its simplicity and low overhead.
+   2. Nearly sorted data: Insertion Sort has a best-case time complexity of O(n) when the input is already nearly sorted.
+   3. Online sorting: When new elements are continuously being added to a sorted list, Insertion Sort can efficiently maintain the sorted order.
+   4. Memory constraints: Insertion Sort requires only O(1) additional space, making it suitable for systems with very limited memory.
+
+**Code Snippet Question:**
+
+Analyze the following code snippet:
+
+```java
+public static void sort(int[] arr) {
+    int n = arr.length;
+    for (int gap = n/2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+```
+
+Question: What sorting algorithm is implemented in this code? How does it differ from the basic version of Insertion Sort, and what advantages does it offer?
+
+Answer: This code implements the Shell Sort algorithm, which is an optimization of Insertion Sort. The key differences and advantages are:
+
+1. Gap Sequence: Shell Sort uses a decreasing gap sequence (starting with n/2 and dividing by 2 in each iteration) to compare and swap elements that are far apart before working on adjacent elements.
+
+2. Reduced Shifting: By comparing elements that are far apart initially, Shell Sort reduces the amount of shifting required for small elements at the end of the array, which is a major inefficiency in basic Insertion Sort.
+
+3. Improved Time Complexity: While the worst-case time complexity of Shell Sort is still O(n^2) for some gap sequences, it generally performs much better than this in practice, often achieving close to O(n log n) time complexity.
+
+4. In-Place Sorting: Like Insertion Sort, Shell Sort sorts the array in-place, maintaining O(1) space complexity.
+
+5. Adaptive: Shell Sort adapts well to partially sorted arrays, potentially achieving even better performance in such cases.
+
+The main advantage of Shell Sort over basic Insertion Sort is its ability to move elements over greater distances, reducing the overall number of comparisons and shifts required to sort the array. This makes it more efficient for larger datasets where basic Insertion Sort would struggle.
+
+Certainly! Let's continue with the next section of our comprehensive Java resource, focusing on Advanced Java Concepts.
+
+6. **Advanced Java Concepts**
+
+### 6.1 Exception Handling
+
+Exception handling is a crucial aspect of Java programming that allows you to gracefully manage errors and unexpected situations in your code.
+
+**Conceptual Explanation:**
+
+Exception handling in Java is based on these key components:
+1. try: The block of code where an exception might occur.
+2. catch: The block that handles the exception if it occurs.
+3. finally: A block that always executes, regardless of whether an exception occurred.
+4. throw: Used to explicitly throw an exception.
+5. throws: Declares that a method might throw an exception.
+
+**Java Implementation:**
+
+```java
+public class ExceptionHandlingExample {
+    public static void main(String[] args) {
+        try {
+            int result = divide(10, 0);
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("This always executes.");
+        }
+    }
+
+    public static int divide(int a, int b) throws ArithmeticException {
+        if (b == 0) {
+            throw new ArithmeticException("Division by zero");
+        }
+        return a / b;
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Handling file I/O errors in data processing applications
+2. Managing network connectivity issues in web applications
+3. Graceful error handling in user interfaces
+
+### 6.2 File I/O
+
+Java provides robust support for file input and output operations, allowing you to read from and write to files efficiently.
+
+**Conceptual Explanation:**
+
+Java's `java.io` and `java.nio` packages offer classes for file operations:
+- FileInputStream and FileOutputStream for byte streams
+- FileReader and FileWriter for character streams
+- BufferedReader and BufferedWriter for efficient reading and writing
+- Files class in java.nio for modern file operations
+
+**Java Implementation:**
+
+```java
+import java.io.*;
+import java.nio.file.*;
+
+public class FileIOExample {
+    public static void main(String[] args) {
+        // Writing to a file
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("example.txt"))) {
+            writer.write("Hello, File I/O!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Reading from a file
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("example.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Log file management in server applications
+2. Configuration file reading in desktop applications
+3. Data export and import features in database systems
+
+### 6.3 Inner Classes and Anonymous Classes
+
+Inner classes and anonymous classes provide ways to encapsulate related functionality within a class or to create one-time use classes on the fly.
+
+**Conceptual Explanation:**
+
+1. Inner Classes: Classes defined within another class. They have access to the enclosing class's members.
+2. Static Nested Classes: Similar to inner classes but don't have access to the enclosing class's instance members.
+3. Anonymous Classes: Unnamed classes defined and instantiated in a single expression, often used for one-time implementations of interfaces or abstract classes.
+
+**Java Implementation:**
+
+```java
+public class OuterClass {
+    private int value = 10;
+
+    // Inner class
+    class InnerClass {
+        void display() {
+            System.out.println("Value from inner class: " + value);
+        }
+    }
+
+    // Static nested class
+    static class StaticNestedClass {
+        void display() {
+            System.out.println("Static nested class method");
+        }
+    }
+
+    public void useAnonymousClass() {
+        // Anonymous class implementing Runnable interface
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Anonymous class running");
+            }
+        };
+        new Thread(r).start();
+    }
+
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        InnerClass inner = outer.new InnerClass();
+        inner.display();
+
+        StaticNestedClass staticNested = new StaticNestedClass();
+        staticNested.display();
+
+        outer.useAnonymousClass();
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Event handlers in GUI applications
+2. Callbacks in asynchronous programming
+3. Implementation of iterators in custom collections
+
+### 6.4 Functional Interfaces and Lambda Expressions
+
+Functional interfaces and lambda expressions, introduced in Java 8, enable a more functional programming style in Java.
+
+**Conceptual Explanation:**
+
+- Functional Interface: An interface with a single abstract method (SAM).
+- Lambda Expression: A concise way to represent an anonymous function that can be passed around as an argument.
+
+**Java Implementation:**
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+        // Using lambda with Predicate functional interface
+        Predicate<String> startsWithC = s -> s.startsWith("C");
+        names.stream()
+             .filter(startsWithC)
+             .forEach(System.out::println);
+
+        // Custom functional interface
+        Calculator add = (a, b) -> a + b;
+        System.out.println("Sum: " + add.calculate(5, 3));
+    }
+
+    @FunctionalInterface
+    interface Calculator {
+        int calculate(int a, int b);
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Stream processing in data analysis
+2. Event handling in reactive programming
+3. Defining sorting criteria in collections
+
+#### Review Section
+
+**Multiple Choice Questions:**
+
+1. Which of the following is NOT a checked exception?
+   a) IOException
+   b) SQLException
+   c) NullPointerException
+   d) ClassNotFoundException
+
+   Answer: c) NullPointerException
+   Explanation: NullPointerException is a runtime exception (unchecked), while the others are checked exceptions that must be declared or caught.
+
+2. What is the primary purpose of the `finally` block in a try-catch-finally structure?
+   a) To handle exceptions
+   b) To execute code regardless of whether an exception occurred
+   c) To throw exceptions
+   d) To prevent exceptions from occurring
+
+   Answer: b) To execute code regardless of whether an exception occurred
+   Explanation: The `finally` block is guaranteed to execute whether or not an exception is thrown, making it useful for cleanup operations.
+
+**Short Answer Questions:**
+
+1. Explain the difference between checked and unchecked exceptions in Java.
+
+   Sample Answer: Checked exceptions are exceptions that must be either caught (using try-catch) or declared (using throws) in the method signature. They represent conditions that a well-written application should anticipate and recover from. Examples include IOException and SQLException. Unchecked exceptions, also known as runtime exceptions, don't need to be explicitly caught or declared. They usually indicate programming errors, such as NullPointerException or ArrayIndexOutOfBoundsException. Checked exceptions are subclasses of Exception (excluding RuntimeException), while unchecked exceptions are subclasses of RuntimeException.
+
+2. Describe a scenario where you would use an inner class instead of a regular class.
+
+   Sample Answer: An inner class would be appropriate when you have a class that is closely tied to the functionality of another class and needs access to its private members. For example, in a GUI application, you might use an inner class to implement an event listener for a specific button. The inner class can access private fields and methods of the outer class, allowing for a more cohesive design. This encapsulation helps in organizing code logically and can lead to more maintainable and readable code, especially when the inner class is not useful outside the context of its outer class.
+
+**Code Snippet Question:**
+
+Analyze the following code snippet:
+
+```java
+public class StreamExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        
+        int sum = numbers.stream()
+                         .filter(n -> n % 2 == 0)
+                         .map(n -> n * n)
+                         .reduce(0, Integer::sum);
+        
+        System.out.println("Sum of squares of even numbers: " + sum);
+    }
+}
+```
+
+Question: Explain what this code does, step by step, and how it demonstrates the use of functional programming concepts in Java.
+
+Answer: This code demonstrates the use of Java Streams and lambda expressions to perform a series of operations on a list of integers. Here's a step-by-step breakdown:
+
+1. A list of integers from 1 to 10 is created.
+2. The `stream()` method is called on the list to create a stream of integers.
+3. `filter(n -> n % 2 == 0)` uses a lambda expression to keep only even numbers in the stream.
+4. `map(n -> n * n)` transforms each remaining number by squaring it.
+5. `reduce(0, Integer::sum)` combines all elements by summing them up, starting with an initial value of 0.
+6. The final result is printed, which is the sum of squares of all even numbers in the original list.
+
+This code demonstrates several functional programming concepts:
+- Lambda expressions for defining small, inline functions (e.g., `n -> n % 2 == 0`).
+- Higher-order functions like `filter`, `map`, and `reduce` that take functions as arguments.
+- Method references (`Integer::sum`) as a shorthand for certain lambda expressions.
+- Immutability and side-effect free operations: the original list is not modified; instead, a new result is produced.
+
+This approach allows for a more declarative style of programming, where you describe what you want to achieve rather than how to achieve it, leading to more concise and often more readable code for complex data processing tasks. Certainly! Let's continue with the next section of our comprehensive Java resource, focusing on Best Practices and Professional Development.
+
+7. **Best Practices and Professional Development**
+
+### 7.1 Code Organization and Documentation
+
+Proper code organization and documentation are crucial for maintaining readable, maintainable, and scalable Java applications.
+
+**Conceptual Explanation:**
+
+1. Package Structure: Organize classes into logical packages.
+2. Naming Conventions: Follow Java naming conventions for clarity.
+3. Comments and Javadoc: Use comments and Javadoc for explaining complex logic and API documentation.
+4. Single Responsibility Principle: Each class and method should have a single, well-defined purpose.
+
+**Java Implementation:**
+
+```java
+package com.example.utilities;
+
+/**
+ * Utility class for string manipulation operations.
+ */
+public class StringUtils {
+
+    /**
+     * Reverses the given string.
+     *
+     * @param input The string to be reversed
+     * @return The reversed string
+     * @throws IllegalArgumentException if the input string is null
+     */
+    public static String reverse(String input) {
+        if (input == null) {
+            throw new IllegalArgumentException("Input string cannot be null");
+        }
+        return new StringBuilder(input).reverse().toString();
+    }
+
+    // Private constructor to prevent instantiation
+    private StringUtils() {
+        throw new AssertionError("Utility class should not be instantiated");
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Large-scale enterprise applications
+2. Open-source projects with multiple contributors
+3. Long-term maintenance of legacy systems
+
+### 7.2 Debugging Techniques
+
+Effective debugging is an essential skill for Java developers to identify and fix issues in their code.
+
+**Conceptual Explanation:**
+
+1. Using IDE Debuggers: Set breakpoints, step through code, and inspect variables.
+2. Logging: Implement logging to track application flow and state.
+3. Exception Handling: Use try-catch blocks to catch and diagnose errors.
+4. Unit Testing: Write tests to isolate and verify individual components.
+
+**Java Implementation:**
+
+```java
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+public class DebuggingExample {
+    private static final Logger LOGGER = Logger.getLogger(DebuggingExample.class.getName());
+
+    public static void main(String[] args) {
+        try {
+            int result = divide(10, 0);
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            LOGGER.log(Level.SEVERE, "An error occurred", e);
+        }
+    }
+
+    public static int divide(int a, int b) {
+        LOGGER.info("Dividing " + a + " by " + b);
+        return a / b;
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Troubleshooting production issues in web applications
+2. Debugging complex algorithms in scientific computing
+3. Isolating performance bottlenecks in data processing systems
+
+### 7.3 Testing in Java
+
+Testing is a critical aspect of software development that ensures code reliability and correctness.
+
+**Conceptual Explanation:**
+
+1. Unit Testing: Testing individual components or methods.
+2. Integration Testing: Testing the interaction between components.
+3. Test-Driven Development (TDD): Writing tests before implementing functionality.
+4. Mocking: Using mock objects to isolate units of code for testing.
+
+**Java Implementation using JUnit 5:**
+
+```java
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorTest {
+
+    @Test
+    void testAddition() {
+        Calculator calculator = new Calculator();
+        assertEquals(5, calculator.add(2, 3), "2 + 3 should equal 5");
+    }
+
+    @Test
+    void testDivision() {
+        Calculator calculator = new Calculator();
+        assertThrows(ArithmeticException.class, () -> calculator.divide(1, 0),
+                     "Division by zero should throw ArithmeticException");
+    }
+}
+
+class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    int divide(int a, int b) {
+        return a / b;
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Continuous Integration/Continuous Deployment (CI/CD) pipelines
+2. Quality assurance in software development lifecycles
+3. Regression testing for software updates
+
+### 7.4 Design Patterns
+
+Design patterns are reusable solutions to common problems in software design, promoting code reuse and maintainability.
+
+**Conceptual Explanation:**
+
+Design patterns are typically categorized into three types:
+1. Creational Patterns: For object creation mechanisms.
+2. Structural Patterns: For composing classes and objects.
+3. Behavioral Patterns: For communication between objects.
+
+**Java Implementation (Singleton Pattern):**
+
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+    public void showMessage() {
+        System.out.println("Hello from Singleton!");
+    }
+}
+
+public class SingletonDemo {
+    public static void main(String[] args) {
+        Singleton singleton = Singleton.getInstance();
+        singleton.showMessage();
+    }
+}
+```
+
+**Real-world Applications:**
+
+1. Database connection pools using Singleton pattern
+2. GUI components using Composite pattern
+3. Payment processing systems using Strategy pattern
+
+#### Review Section
+
+**Multiple Choice Questions:**
+
+1. Which of the following is NOT a principle of Test-Driven Development (TDD)?
+   a) Write the test first
+   b) Run all tests and see if the new one fails
+   c) Write the implementation code
+   d) Optimize the code before writing tests
+
+   Answer: d) Optimize the code before writing tests
+   Explanation: TDD follows a "Red-Green-Refactor" cycle where tests are written first, then the implementation, and finally optimization. Optimizing before writing tests goes against the TDD principle.
+
+2. What is the primary purpose of the Singleton design pattern?
+   a) To create multiple instances of a class
+   b) To ensure a class has only one instance
+   c) To implement inheritance
+   d) To achieve polymorphism
+
+   Answer: b) To ensure a class has only one instance
+   Explanation: The Singleton pattern restricts the instantiation of a class to a single instance and provides a global point of access to that instance.
+
+**Short Answer Questions:**
+
+1. Explain the importance of code documentation and provide examples of good documentation practices in Java.
+
+   Sample Answer: Code documentation is crucial for several reasons:
+   1. It helps other developers (and your future self) understand the code's purpose and functionality.
+   2. It facilitates maintenance and updates to the codebase.
+   3. It can be used to generate API documentation for libraries or frameworks.
+
+   Good documentation practices in Java include:
+   1. Using Javadoc comments for classes, methods, and fields, explaining their purpose, parameters, return values, and exceptions.
+   2. Writing clear and concise inline comments for complex logic.
+   3. Following a consistent naming convention for variables, methods, and classes.
+   4. Providing examples or usage instructions for public APIs.
+   5. Keeping documentation up-to-date when code changes.
+
+   Example of good Javadoc:
+   ```java
+   /**
+    * Calculates the factorial of a given number.
+    *
+    * @param n the number to calculate the factorial for
+    * @return the factorial of n
+    * @throws IllegalArgumentException if n is negative
+    */
+   public static long factorial(int n) {
+       // Method implementation
+   }
+   ```
+
+2. Describe the difference between unit testing and integration testing, and explain when you would use each.
+
+   Sample Answer: Unit testing and integration testing are two different levels of software testing:
+
+   Unit Testing:
+   - Focuses on testing individual components or methods in isolation.
+   - Typically involves mocking or stubbing dependencies.
+   - Aims to verify that each unit of code works as expected.
+   - Fast to run and helps in identifying issues early in the development process.
+   - Used during development to ensure each piece of code functions correctly.
+
+   Integration Testing:
+   - Tests the interaction between different components or systems.
+   - Verifies that different parts of the application work together correctly.
+   - May involve testing with actual dependencies or external systems.
+   - Takes longer to run compared to unit tests.
+   - Used after individual components have been unit tested, to ensure they work together as expected.
+
+   When to use:
+   - Use unit tests during development for rapid feedback on individual components.
+   - Use integration tests after unit testing to verify system-wide functionality and interactions between components.
+   - Both types of tests are typically part of a comprehensive testing strategy in professional software development.
+
+**Code Snippet Question:**
+
+Analyze the following code snippet:
+
+```java
+public class UserService {
+    private UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    }
+}
+
+public interface UserRepository {
+    Optional<User> findById(Long id);
+}
+
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+Question: Explain how this code demonstrates good software design principles and practices. How would you approach testing this code?
+
+Answer: This code demonstrates several good software design principles and practices:
+
+1. Dependency Injection: The `UserService` depends on a `UserRepository`, which is injected through the constructor. This promotes loose coupling and makes the code more testable and flexible.
+
+2. Single Responsibility Principle: The `UserService` class has a single responsibility of managing user-related operations, while the actual data access is delegated to the `UserRepository`.
+
+3. Interface Segregation: The `UserRepository` is defined as an interface, allowing for different implementations (e.g., database, in-memory) without changing the `UserService`.
+
+4. Exception Handling: A custom `UserNotFoundException` is used to provide clear error messaging when a user is not found.
+
+5. Optional Usage: The `findById` method returns an `Optional<User>`, which is a good practice for handling potentially absent values.
+
+Approach to testing this code:
+
+1. Unit Testing `UserService`:
+   - Create a mock `UserRepository` using a mocking framework like Mockito.
+   - Test the `getUserById` method with various scenarios:
+     a. When the user exists: Mock the repository to return a user and verify the result.
+     b. When the user doesn't exist: Mock the repository to return an empty Optional and verify that `UserNotFoundException` is thrown.
+
+2. Integration Testing:
+   - Create a test implementation of `UserRepository` (e.g., using an in-memory database).
+   - Test the `UserService` with this real implementation to ensure proper integration.
+
+3. Exception Testing:
+   - Verify that `UserNotFoundException` is thrown with the correct message when a user is not found.
+
+4. Edge Case Testing:
+   - Test with null or invalid IDs to ensure proper error handling.
+
+Example unit test (using JUnit and Mockito):
+
+```java
+@Test
+void getUserById_WhenUserExists_ReturnsUser() {
+    Long userId = 1L;
+    User expectedUser = new User(userId, "John Doe");
+    when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
+
+    User actualUser = userService.getUserById(userId);
+
+    assertEquals(expectedUser, actualUser);
+}
+
+@Test
+void getUserById_WhenUserDoesNotExist_ThrowsException() {
+    Long userId = 1L;
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
+}
+```
+
+This testing approach ensures that the `UserService` functions correctly in isolation and in integration with its dependencies, covering both normal operation and error scenarios. 
