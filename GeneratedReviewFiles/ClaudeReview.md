@@ -2046,3 +2046,379 @@ void getUserById_WhenUserDoesNotExist_ThrowsException() {
 ```
 
 This testing approach ensures that the `UserService` functions correctly in isolation and in integration with its dependencies, covering both normal operation and error scenarios. 
+
+Certainly! Let's continue with section 7.4 on Design Patterns in our review document.
+
+7.4 Design Patterns
+
+Design patterns are reusable solutions to common problems in software design. They provide templates for solving issues that occur frequently in software development. In Java, several design patterns are commonly used to improve code structure, maintainability, and flexibility. Here are some key design patterns relevant to this course:
+
+1. Singleton Pattern:
+   - Ensures a class has only one instance and provides a global point of access to it.
+   - Example use case: Managing a shared resource like a database connection pool.
+
+   ```java
+   public class DatabaseConnection {
+       private static DatabaseConnection instance;
+       
+       private DatabaseConnection() {}
+       
+       public static DatabaseConnection getInstance() {
+           if (instance == null) {
+               instance = new DatabaseConnection();
+           }
+           return instance;
+       }
+   }
+   ```
+
+2. Factory Method Pattern:
+   - Defines an interface for creating an object, but lets subclasses decide which class to instantiate.
+   - Useful for creating objects without specifying their exact class.
+
+   ```java
+   public interface Animal {
+       void makeSound();
+   }
+
+   public class Dog implements Animal {
+       public void makeSound() {
+           System.out.println("Woof");
+       }
+   }
+
+   public class AnimalFactory {
+       public Animal createAnimal(String type) {
+           if ("dog".equalsIgnoreCase(type)) {
+               return new Dog();
+           }
+           // Add other animals as needed
+           return null;
+       }
+   }
+   ```
+
+3. Observer Pattern:
+   - Defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically.
+   - Commonly used in event handling systems.
+
+   ```java
+   import java.util.ArrayList;
+   import java.util.List;
+
+   interface Observer {
+       void update(String message);
+   }
+
+   class Subject {
+       private List<Observer> observers = new ArrayList<>();
+       
+       public void addObserver(Observer observer) {
+           observers.add(observer);
+       }
+       
+       public void notifyObservers(String message) {
+           for (Observer observer : observers) {
+               observer.update(message);
+           }
+       }
+   }
+   ```
+
+4. Strategy Pattern:
+   - Defines a family of algorithms, encapsulates each one, and makes them interchangeable.
+   - Allows the algorithm to vary independently from clients that use it.
+
+   ```java
+   interface SortStrategy {
+       void sort(int[] array);
+   }
+
+   class BubbleSort implements SortStrategy {
+       public void sort(int[] array) {
+           // Bubble sort implementation
+       }
+   }
+
+   class QuickSort implements SortStrategy {
+       public void sort(int[] array) {
+           // Quick sort implementation
+       }
+   }
+
+   class Sorter {
+       private SortStrategy strategy;
+       
+       public void setStrategy(SortStrategy strategy) {
+           this.strategy = strategy;
+       }
+       
+       public void performSort(int[] array) {
+           strategy.sort(array);
+       }
+   }
+   ```
+
+These design patterns demonstrate important OOP principles like encapsulation, abstraction, and polymorphism. They help in creating more flexible and maintainable code by providing standardized solutions to common design problems.
+
+Understanding these patterns is crucial for writing scalable and robust Java applications. They're often used in larger systems and frameworks, and knowledge of these patterns is valuable for software design and architecture.
+Certainly, I'll continue with the next section.
+
+8. Advanced Java Concepts
+
+8.1 Exception Handling
+
+Conceptual Explanation:
+Exception handling in Java is a mechanism to handle runtime errors and exceptional conditions that may occur during program execution. It allows you to separate error-handling code from regular code, improving readability and maintainability.
+
+Practical Java Implementation:
+
+```java
+public class ExceptionHandlingExample {
+    public static void main(String[] args) {
+        try {
+            int result = divideNumbers(10, 0);
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Error: Cannot divide by zero");
+        } finally {
+            System.out.println("This block always executes");
+        }
+
+        try {
+            checkAge(15);
+        } catch (CustomException e) {
+            System.out.println("CustomException: " + e.getMessage());
+        }
+    }
+
+    public static int divideNumbers(int a, int b) throws ArithmeticException {
+        return a / b;
+    }
+
+    public static void checkAge(int age) throws CustomException {
+        if (age < 18) {
+            throw new CustomException("Age must be 18 or older");
+        }
+        System.out.println("Access granted");
+    }
+}
+
+class CustomException extends Exception {
+    public CustomException(String message) {
+        super(message);
+    }
+}
+```
+
+Real-world Applications:
+1. Handling network errors in web applications
+2. Managing file I/O operations
+3. Validating user input in forms
+
+8.2 File I/O
+
+Conceptual Explanation:
+Java provides various classes and methods to read from and write to files. The java.io and java.nio packages offer both byte-oriented and character-oriented I/O operations.
+
+Practical Java Implementation:
+
+```java
+import java.io.*;
+import java.nio.file.*;
+
+public class FileIOExample {
+    public static void main(String[] args) {
+        // Writing to a file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            writer.write("Hello, World!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Reading from a file
+        try {
+            String content = new String(Files.readAllBytes(Paths.get("output.txt")));
+            System.out.println("File content: " + content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Appending to a file
+        try (FileWriter fw = new FileWriter("output.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println("Appended text");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+Real-world Applications:
+1. Logging application events
+2. Reading configuration files
+3. Exporting data to CSV or other file formats
+
+8.3 Inner Classes and Anonymous Classes
+
+Conceptual Explanation:
+Inner classes are classes defined within other classes. They have access to members of the enclosing class. Anonymous classes are unnamed classes defined and instantiated in a single expression.
+
+Practical Java Implementation:
+
+```java
+public class OuterClass {
+    private int value = 10;
+
+    // Inner class
+    class InnerClass {
+        public void print() {
+            System.out.println("Value from inner class: " + value);
+        }
+    }
+
+    // Static nested class
+    static class StaticNestedClass {
+        public void print() {
+            System.out.println("Static nested class method");
+        }
+    }
+
+    public void displayMessage() {
+        // Local class
+        class LocalClass {
+            public void print() {
+                System.out.println("Message from local class");
+            }
+        }
+        LocalClass local = new LocalClass();
+        local.print();
+
+        // Anonymous class
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Anonymous class implementing Runnable");
+            }
+        };
+        runnable.run();
+    }
+
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        InnerClass inner = outer.new InnerClass();
+        inner.print();
+
+        StaticNestedClass staticNested = new StaticNestedClass();
+        staticNested.print();
+
+        outer.displayMessage();
+    }
+}
+```
+
+Real-world Applications:
+1. Implementing callback interfaces
+2. Creating specialized implementations of abstract classes or interfaces
+3. Encapsulating helper classes that are only used in one place
+
+8.4 Functional Interfaces and Lambda Expressions
+
+Conceptual Explanation:
+Functional interfaces are interfaces with a single abstract method. Lambda expressions provide a concise way to create instances of functional interfaces, enabling more functional programming styles in Java.
+
+Practical Java Implementation:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Lambda expression with Runnable
+        Runnable runnable = () -> System.out.println("Hello from lambda!");
+        runnable.run();
+
+        // Lambda with functional interface
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println("10 + 5 = " + operate(10, 5, addition));
+
+        // Lambda with Predicate
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        System.out.println("Even numbers: " + filterNumbers(numbers, n -> n % 2 == 0));
+    }
+
+    @FunctionalInterface
+    interface MathOperation {
+        int operate(int a, int b);
+    }
+
+    private static int operate(int a, int b, MathOperation mathOperation) {
+        return mathOperation.operate(a, b);
+    }
+
+    private static List<Integer> filterNumbers(List<Integer> numbers, Predicate<Integer> predicate) {
+        return numbers.stream().filter(predicate).toList();
+    }
+}
+```
+
+Real-world Applications:
+1. Event handling in GUI applications
+2. Implementing sorting and filtering operations
+3. Defining custom behaviors in stream operations
+
+Review Section:
+
+Multiple Choice:
+1. Which of the following is true about the `finally` block in a try-catch-finally statement?
+   a) It always executes, whether an exception is thrown or not
+   b) It only executes if an exception is thrown
+   c) It only executes if no exception is thrown
+   d) It is optional in a try-catch statement
+
+   Answer: a) It always executes, whether an exception is thrown or not
+   Explanation: The `finally` block in a try-catch-finally statement always executes, regardless of whether an exception is thrown or caught. This makes it useful for cleanup operations that should always occur, such as closing file handles or database connections.
+
+2. Which of the following is NOT a type of inner class in Java?
+   a) Static nested class
+   b) Non-static nested class
+   c) Local class
+   d) Virtual class
+
+   Answer: d) Virtual class
+   Explanation: Java does not have a concept called "virtual class". The types of inner classes in Java are: static nested classes, non-static nested classes (also called inner classes), local classes (defined in a block of code), and anonymous classes.
+
+Short Answer:
+1. Explain the difference between checked and unchecked exceptions in Java.
+
+Sample Answer: Checked exceptions are exceptions that must be either caught or declared in the method signature using the `throws` keyword. They are typically used for recoverable conditions and are subclasses of Exception but not RuntimeException. Examples include IOException and SQLException. Unchecked exceptions, on the other hand, do not need to be explicitly caught or declared. They are typically used for programming errors and are subclasses of RuntimeException. Examples include NullPointerException and ArrayIndexOutOfBoundsException. The key difference is that the compiler enforces handling of checked exceptions, while unchecked exceptions are not checked by the compiler.
+
+Code Snippet:
+Analyze the following code and explain what it does:
+
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+names.stream()
+     .filter(name -> name.startsWith("C"))
+     .map(String::toUpperCase)
+     .forEach(System.out::println);
+```
+
+Solution: This code demonstrates the use of Java streams and lambda expressions to process a list of names. Here's what it does step by step:
+
+1. It starts with a list of names: Alice, Bob, Charlie, and David.
+2. `.stream()` converts the list into a stream for processing.
+3. `.filter(name -> name.startsWith("C"))` uses a lambda expression to keep only the names that start with "C".
+4. `.map(String::toUpperCase)` transforms each remaining name to uppercase. This uses a method reference.
+5. `.forEach(System.out::println)` prints each resulting name. This also uses a method reference.
+
+The output will be:
+```
+CHARLIE
+```
+
+This code showcases how functional programming concepts in Java can be used to write concise and expressive code for data processing tasks.
