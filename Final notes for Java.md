@@ -11,6 +11,8 @@ Final Notes for Java
 * Show return types, parameters, and variables
 * Show inheritance
 
+![alt text](FlowchartShapes.png)
+
 **Important Note:**
 
 Remember that parameters of a method are specific to that method and are obvious.
