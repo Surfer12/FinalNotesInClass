@@ -1,8 +1,7 @@
-package ArrayListsOverridenCustomMethods;
-
-import java.util.Arrays;
+package FinalNotesInClass;
 
 /**
+ * 
  * The MyArrayList class represents a custom implementation of an ArrayList.
  * It provides methods to add, remove, get, set, and manipulate elements in the
  * list.
@@ -49,7 +48,7 @@ public class MyArrayList<E> {
      * @param index   index at which the specified element is to be inserted
      * @param element element to be inserted
      * @throws IndexOutOfBoundsException if the index is out of range
-     * @throws NullPointerException if the element is null
+     * @throws NullPointerException      if the element is null
      */
     public void add(int index, E element) {
         checkIndex(index);
@@ -75,13 +74,14 @@ public class MyArrayList<E> {
     }
 
     /**
-     * Replaces the element at the specified position in this list with the specified element.
+     * Replaces the element at the specified position in this list with the
+     * specified element.
      *
      * @param index   index of the element to replace
      * @param element element to be stored at the specified position
      * @return the element previously at the specified position
      * @throws IndexOutOfBoundsException if the index is out of range
-     * @throws NullPointerException if the element is null
+     * @throws NullPointerException      if the element is null
      */
     public E set(int index, E element) {
         checkIndex(index);
@@ -93,7 +93,8 @@ public class MyArrayList<E> {
 
     /**
      * Removes the element at the specified position in this list.
-     * Shifts any subsequent elements to the left (subtracts one from their indices).
+     * Shifts any subsequent elements to the left (subtracts one from their
+     * indices).
      *
      * @param index the index of the element to be removed
      * @return the element that was removed from the list
@@ -133,7 +134,7 @@ public class MyArrayList<E> {
      *
      * @param element element to search for
      * @return the index of the first occurrence of the specified element in
-     * this list, or -1 if this list does not contain the element
+     *         this list, or -1 if this list does not contain the element
      * @throws NullPointerException if the element is null
      */
     public int indexOf(E element) {
